@@ -14,10 +14,17 @@
 %% API
 %%====================================================================
 
-start(_StartType, _StartArgs) ->
+start(_Type, _Args) ->
+    Dispatch = cowboy_router:compile([
+        {'_', [
+            {"/", cowboy_learning_handler, []}
+        ]}
+    ]),
+    {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
+        env => #{dispatch => Dispatch}
+    }),
     cowboy_learning_sup:start_link().
 
-%%--------------------------------------------------------------------
 stop(_State) ->
     ok.
 

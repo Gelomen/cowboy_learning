@@ -19,8 +19,9 @@
 %% API functions
 %%====================================================================
 
+-spec start_link() -> {ok, pid()}.
 start_link() ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+    supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 %%====================================================================
 %% Supervisor callbacks
@@ -31,7 +32,8 @@ start_link() ->
 %% Before OTP 18 tuples must be used to specify a child. e.g.
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-    {ok, { {one_for_all, 0, 1}, []} }.
+    Procs = [],
+    {ok, {{one_for_one, 10, 10}, Procs}}.
 
 %%====================================================================
 %% Internal functions
